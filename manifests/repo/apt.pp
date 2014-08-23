@@ -22,15 +22,17 @@ class uchiwa::repo::apt {
         $url = 'http://repos.sensuapp.org/apt'
       }
 
-      apt::source { 'sensu':
-        ensure      => $ensure,
-        location    => $url,
-        release     => 'sensu',
-        repos       => $uchiwa::repo,
-        include_src => false,
-        key         => $uchiwa::repo_key_id,
-        key_source  => $uchiwa::repo_key_source,
-        before      => Package['uchiwa'],
+      if !defined(Apt::Source['sensu']) {
+        apt::source { 'sensu':
+          ensure      => $ensure,
+          location    => $url,
+          release     => 'sensu',
+          repos       => $uchiwa::repo,
+          include_src => false,
+          key         => $uchiwa::repo_key_id,
+          key_source  => $uchiwa::repo_key_source,
+          before      => Package['uchiwa'],
+        }
       }
 
     } else {
